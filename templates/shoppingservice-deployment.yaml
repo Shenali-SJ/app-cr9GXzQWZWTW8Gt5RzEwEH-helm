@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: '{{.Values.microservices.shoppingservice.serviceName}}'
+  labels:
+    app: '{{.Values.microservices.shoppingservice.serviceName}}'
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: '{{.Values.microservices.shoppingservice.serviceName}}'
+  template:
+    metadata:
+      labels:
+        app: '{{.Values.microservices.shoppingservice.serviceName}}'
+    spec:
+      containers:
+      - name: '{{.Values.microservices.shoppingservice.serviceName}}'
+        image: '{{.Values.microservices.shoppingservice.dockerImage}}'
+        ports:
+        - containerPort: 8080
+        env:
+        - name: '{{.Values.microservices.shoppingservice.envs.MYSQL_ROOT_PASSWORD.name}}'
+          valueFrom:
+            configMapKeyRef:
+              name: '{{.Values.microservices.shoppingservice.serviceName}}'
+              key: '{{.Values.microservices.shoppingservice.envs.MYSQL_ROOT_PASSWORD.name}}'
+        - name: '{{.Values.microservices.shoppingservice.envs.MYSQL_DATABASE.name}}'
+          valueFrom:
+            configMapKeyRef:
+              name: '{{.Values.microservices.shoppingservice.serviceName}}'
+              key: '{{.Values.microservices.shoppingservice.envs.MYSQL_DATABASE.name}}'
+        - name: '{{.Values.microservices.shoppingservice.envs.DB_HOST.name}}'
+          valueFrom:
+            configMapKeyRef:
+              name: '{{.Values.microservices.shoppingservice.serviceName}}'
+              key: '{{.Values.microservices.shoppingservice.envs.DB_HOST.name}}'
+        - name: '{{.Values.microservices.shoppingservice.envs.DB_USERNAME.name}}'
+          valueFrom:
+            configMapKeyRef:
+              name: '{{.Values.microservices.shoppingservice.serviceName}}'
+              key: '{{.Values.microservices.shoppingservice.envs.DB_USERNAME.name}}'
+        - name: '{{.Values.microservices.shoppingservice.envs.DB_PASSWORD.name}}'
+          valueFrom:
+            configMapKeyRef:
+              name: '{{.Values.microservices.shoppingservice.serviceName}}'
+              key: '{{.Values.microservices.shoppingservice.envs.DB_PASSWORD.name}}'
